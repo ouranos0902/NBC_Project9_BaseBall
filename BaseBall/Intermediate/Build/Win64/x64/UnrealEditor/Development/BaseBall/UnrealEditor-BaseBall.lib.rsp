@@ -1,0 +1,13 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-BaseBall.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"D:\unreal work file\Git\NBC_Project9_BaseBall\BaseBall\Intermediate\Build\Win64\x64\BaseBallEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
+"D:\unreal work file\Git\NBC_Project9_BaseBall\BaseBall\Intermediate\Build\Win64\x64\UnrealEditor\Development\BaseBall\BaseBall.cpp.obj"
+"D:\unreal work file\Git\NBC_Project9_BaseBall\BaseBall\Intermediate\Build\Win64\x64\UnrealEditor\Development\BaseBall\PerModuleInline.gen.cpp.obj"
+"D:\unreal work file\Git\NBC_Project9_BaseBall\BaseBall\Intermediate\Build\Win64\x64\UnrealEditor\Development\BaseBall\Default.rc2.res"
+/OUT:"D:\unreal work file\Git\NBC_Project9_BaseBall\BaseBall\Intermediate\Build\Win64\x64\UnrealEditor\Development\BaseBall\UnrealEditor-BaseBall.lib"

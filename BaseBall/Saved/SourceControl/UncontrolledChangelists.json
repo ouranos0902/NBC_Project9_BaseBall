@@ -5,7 +5,9 @@
 			"guid": "00000000000000000000000000000000",
 			"description": "Default Uncontrolled Changelist",
 			"files": [
-				"D:/unreal work file/Git/NBC_Project9_BaseBall/BaseBall/Content/BaseBall/Maps/L_Chatting.umap"
+				"D:/unreal work file/Git/NBC_Project9_BaseBall/BaseBall/Content/BaseBall/Maps/L_Chatting.umap",
+				"D:/unreal work file/Git/NBC_Project9_BaseBall/BaseBall/Content/BaseBall/BluePrint/Game/BP_GameModeBase.uasset",
+				"D:/unreal work file/Git/NBC_Project9_BaseBall/BaseBall/Content/BaseBall/BluePrint/Player/BP_PlayerController.uasset"
 			]
 		}
 	]

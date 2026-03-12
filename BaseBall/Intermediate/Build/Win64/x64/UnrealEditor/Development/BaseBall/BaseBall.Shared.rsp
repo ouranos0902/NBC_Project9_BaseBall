@@ -1,4 +1,6 @@
 /I "."
+/I "D:\unreal work file\Git\NBC_Project9_BaseBall\BaseBall\Intermediate\Build\Win64\UnrealEditor\Inc\BaseBall\UHT"
+/I "D:\unreal work file\Git\NBC_Project9_BaseBall\BaseBall\Source\BaseBall"
 /I "D:\unreal work file\Git\NBC_Project9_BaseBall\BaseBall\Source"
 /I "Runtime\Core\Public"
 /I "Runtime\Core\Internal"

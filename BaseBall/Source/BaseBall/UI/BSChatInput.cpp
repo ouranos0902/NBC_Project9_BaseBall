@@ -31,10 +31,10 @@ void UBSChatInput::OnChatInputTextCommited(const FText& InText, ETextCommit::Typ
 	{
 		APlayerController* OwningPlayerController = GetOwningPlayer();
 		
-		if (OwningPlayerController)
+		if (IsValid(OwningPlayerController)==true)
 		{
 			ABSPlayerController* OwningBSPlayerController = Cast<ABSPlayerController>(OwningPlayerController);
-			if (OwningBSPlayerController)
+			if (IsValid(OwningBSPlayerController)==true)
 			{
 				OwningBSPlayerController->SetChatMessageString(InText.ToString());
 				EditableTextBox_ChatInput->SetText(FText());

@@ -19,7 +19,7 @@ public:
 	
 	void SetChatMessageString(const FString &InChatMessageString);
 	
-	void PrintChatMessageString(const FString &ChatMessageString);
+	void PrintChatMessageString(const FString &InChatMessageString);
 	
 protected:
 	

@@ -27,11 +27,11 @@ void ABSPlayerController::SetChatMessageString(const FString& InChatMessageStrin
 	ChatMessageString = InChatMessageString;
 }
 
-void ABSPlayerController::PrintChatMessageString(const FString& ChatMessageString)
+void ABSPlayerController::PrintChatMessageString(const FString& InChatMessageString)
 {
 	UKismetSystemLibrary::PrintString(
 		this,
-		ChatMessageString,
+		InChatMessageString,
 		true,
 		true,
 		FLinearColor::White,

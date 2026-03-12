@@ -3,6 +3,8 @@
 
 #include "BSPlayerController.h"
 
+#include "Kismet/KismetSystemLibrary.h"
+
 void ABSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -18,4 +20,20 @@ void ABSPlayerController::BeginPlay()
 			ChatInputWidgetInstance->AddToViewport();
 		}
 	}
+}
+
+void ABSPlayerController::SetChatMessageString(const FString& InChatMessageString)
+{
+	ChatMessageString = InChatMessageString;
+}
+
+void ABSPlayerController::PrintChatMessageString(const FString& ChatMessageString)
+{
+	UKismetSystemLibrary::PrintString(
+		this,
+		ChatMessageString,
+		true,
+		true,
+		FLinearColor::White,
+		5.0f);
 }

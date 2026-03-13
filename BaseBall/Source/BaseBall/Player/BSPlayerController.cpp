@@ -2,6 +2,8 @@
 
 
 #include "BSPlayerController.h"
+
+#include "BSPlayerState.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Game/BSGameModeBase.h"
@@ -29,7 +31,12 @@ void ABSPlayerController::SetChatMessageString(const FString& InChatMessageStrin
 	ChatMessageString = InChatMessageString;
 	if (IsLocalController() == true)
 	{
-		ServerRPCPrintChatMessageString(InChatMessageString);
+		ABSPlayerState* BSPS = GetPlayerState<ABSPlayerState>();
+		if (IsValid(BSPS) == true)
+		{
+			FString CombinedChatMessageString = BSPS->PlayerNameString + TEXT(": ") + InChatMessageString;
+			ServerRPCPrintChatMessageString(CombinedChatMessageString);
+		}
 	}
 }
 

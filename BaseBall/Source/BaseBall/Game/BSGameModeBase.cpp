@@ -5,6 +5,7 @@
 #include "BSGameStateBase.h"
 #include "Player/BSPlayerController.h"
 #include "EngineUtils.h"
+#include "Player/BSPlayerState.h"
 
 void ABSGameModeBase::BeginPlay()
 {
@@ -16,16 +17,21 @@ void ABSGameModeBase::OnPostLogin(AController* NewPlayer)
 {
 	Super::OnPostLogin(NewPlayer);
 	
-	ABSGameStateBase* BSGameStateBase = GetGameState<ABSGameStateBase>();
-	if (IsValid(BSGameStateBase) == true)
-	{
-		BSGameStateBase->MulticastRPCBroadcastLoginMessage(TEXT("XXXXXX"));
-	}
-	
 	ABSPlayerController* BSPlayerController = Cast<ABSPlayerController>(NewPlayer);
-	if (IsValid(BSPlayerController) == true)
+	if (IsValid(BSPlayerController)==true)
 	{
 		AllPlayerControllers.Add(BSPlayerController);
+		
+		ABSPlayerState* BSPS = BSPlayerController->GetPlayerState<ABSPlayerState>();
+		if (IsValid(BSPS)==true)
+		{
+			BSPS->PlayerNameString = TEXT("Player") + FString::FromInt(AllPlayerControllers.Num());
+		}
+		ABSGameStateBase* BSGameStateBase = GetGameState<ABSGameStateBase>();
+		if (IsValid(BSGameStateBase)==true)
+		{
+			BSGameStateBase->MulticastRPCBroadcastLoginMessage(BSPS->PlayerNameString);
+		}
 	}
 }
 

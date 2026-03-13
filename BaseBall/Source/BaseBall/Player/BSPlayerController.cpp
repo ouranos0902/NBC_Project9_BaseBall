@@ -20,6 +20,10 @@ void ABSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (!IsLocalController() == true)
+	{
+		return;
+	}
 	FInputModeUIOnly InputModeUIOnly;
 	SetInputMode(InputModeUIOnly);
 

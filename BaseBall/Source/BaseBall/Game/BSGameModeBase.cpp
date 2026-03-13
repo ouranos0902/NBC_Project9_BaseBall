@@ -10,7 +10,8 @@
 void ABSGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
-	SecretNumberString = GenerateRandomSecretNumber();
+	SecretNumberString = GenerateSecretNumber();
+	UE_LOG(LogTemp, Error, TEXT("New Secret Number : %s"), *SecretNumberString);
 }
 
 void ABSGameModeBase::OnPostLogin(AController* NewPlayer)
@@ -52,6 +53,8 @@ void ABSGameModeBase::PrintChatMessageString(ABSPlayerController* InChattingPlay
 			{
 				FString CombinedMessageString = InChatMessageString + TEXT("->") + JudgeResultString + TEXT("\n");
 				BSPlayerController->ClientRPCPrintChatMessageString(CombinedMessageString);
+				int32 StrikeCount = FCString::Atoi(*JudgeResultString.Left(1));
+				JudgeGame(InChattingPlayerController,StrikeCount);
 			}
 		}
 	}
@@ -68,7 +71,7 @@ void ABSGameModeBase::PrintChatMessageString(ABSPlayerController* InChattingPlay
 	}
 }
 
-FString ABSGameModeBase::GenerateRandomSecretNumber()
+FString ABSGameModeBase::GenerateSecretNumber()
 {
 	TArray<int32> Numbers;
 	for (int32 i =1; i<=9; ++i)
@@ -83,7 +86,7 @@ FString ABSGameModeBase::GenerateRandomSecretNumber()
 	{
 		int32 Index = FMath::RandRange(0, Numbers.Num() - 1);
 		Result.Append(FString::FromInt(Numbers[Index]));
-		Numbers.RemoveAt(Numbers.Num() - 1, 1);
+		Numbers.RemoveAt(Index);
 	}
 	return Result;
 }
@@ -95,7 +98,7 @@ FString ABSGameModeBase::JudgeResult(const FString& InSecretNumberString, const 
 	
 	for (int32 i=0; i<3; ++i)
 	{
-		if (InSecretNumberString.Len() == InGuessNumberString[i])
+		if (InSecretNumberString[i] == InGuessNumberString[i])
 		{
 			StrikeCount++;
 		}
@@ -139,8 +142,9 @@ bool ABSGameModeBase::bIsGuessNumberString(const FString& InNumberString)
 		}
 		if (bIsUnique==false)
 		{
-			bCanPlay = true;
+			break;
 		}
+		bCanPlay = true;
 	}while (false);
 	
     return bCanPlay;
@@ -152,5 +156,64 @@ void ABSGameModeBase::IncreaseGuessCount(ABSPlayerController* InChattingPlayerCo
 	if (IsValid(BSPS)==true)
 	{
 		BSPS->CurrentGuessCount++;
+	}
+}
+
+void ABSGameModeBase::ResetGame()
+{
+	SecretNumberString = GenerateSecretNumber();
+	
+	UE_LOG(LogTemp, Error, TEXT("New Secret Number: %s"), *SecretNumberString);
+	
+	for (const auto& BSPlayerController : AllPlayerControllers)
+	{
+		ABSPlayerState* BSPS = BSPlayerController->GetPlayerState<ABSPlayerState>();
+		if (IsValid(BSPS)==true)
+		{
+			BSPS->CurrentGuessCount = 0;
+		}
+	}
+}
+
+void ABSGameModeBase::JudgeGame(ABSPlayerController* InChattingPlayerController, int InStrikeCount)	
+{
+	if (InStrikeCount == 3)
+	{
+		ABSPlayerState* BSPS = InChattingPlayerController->GetPlayerState<ABSPlayerState>();
+		for (const auto& BSPlayerController : AllPlayerControllers)
+		{
+			if (IsValid(BSPS)==true)
+			{
+				FString CombinedMessageString = BSPS->PlayerNameString + TEXT("has won the game");
+				BSPlayerController->NotificationText = FText::FromString(CombinedMessageString);
+				
+				ResetGame();
+				return;
+			}
+		}
+	}
+	else
+	{
+		bool bIsDraw = true;
+		for (const auto& BSPlayerController : AllPlayerControllers)
+		{
+			ABSPlayerState* BSPS = BSPlayerController->GetPlayerState<ABSPlayerState>();
+			if (IsValid(BSPS) == true)
+			{
+				if (BSPS->CurrentGuessCount < BSPS->MaxGuessCount)
+				{
+					bIsDraw = false;
+					break;
+				}
+			}
+		}
+		if (bIsDraw == true)
+		{
+			for (const auto& BSPlayerController : AllPlayerControllers)
+			{
+				BSPlayerController->NotificationText = FText::FromString(TEXT("Draw"));
+				ResetGame();
+			}
+		}
 	}
 }

@@ -25,7 +25,11 @@ class BASEBALL_API ABSGameModeBase : public AGameModeBase
 	
 	void IncreaseGuessCount(ABSPlayerController* InChattingPlayerController);
 	
-	FString GenerateRandomSecretNumber();
+	void ResetGame();
+	
+	void JudgeGame(ABSPlayerController* InChattingPlayerController, int InStrikeCount);
+	
+	FString GenerateSecretNumber();
 		
 	FString JudgeResult(const FString& InSecretNumberString, const FString& InGuessNumberString);
 	

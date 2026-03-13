@@ -2,8 +2,8 @@
 
 
 #include "BSPlayerController.h"
-
 #include "Kismet/KismetSystemLibrary.h"
+#include "EngineUtils.h"
 
 void ABSPlayerController::BeginPlay()
 {
@@ -25,6 +25,10 @@ void ABSPlayerController::BeginPlay()
 void ABSPlayerController::SetChatMessageString(const FString& InChatMessageString)
 {
 	ChatMessageString = InChatMessageString;
+	if (IsLocalController() == true)
+	{
+		ServerRPCPrintChatMessageString(InChatMessageString);
+	}
 }
 
 void ABSPlayerController::PrintChatMessageString(const FString& InChatMessageString)
@@ -36,4 +40,21 @@ void ABSPlayerController::PrintChatMessageString(const FString& InChatMessageStr
 		true,
 		FLinearColor::White,
 		5.0f);
+}
+
+void ABSPlayerController::ServerRPCPrintChatMessageString_Implementation(const FString& InChatMessageString)
+{
+	for (TActorIterator<ABSPlayerController> It(GetWorld()); It; ++It)
+	{
+		ABSPlayerController* ABSPlayerController = *It;
+		if (IsValid(ABSPlayerController) == true)
+		{
+			ABSPlayerController->ClientRPCPrintChatMessageString(InChatMessageString);
+		}
+	}
+}
+
+void ABSPlayerController::ClientRPCPrintChatMessageString_Implementation(const FString& InChatMessageString)
+{
+	PrintChatMessageString(InChatMessageString);
 }

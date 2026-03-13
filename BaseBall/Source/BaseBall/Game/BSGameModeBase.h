@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "BSGameModeBase.generated.h"
 
+class ABSPlayerController;
 /**
  * 
  */
@@ -15,5 +16,16 @@ class BASEBALL_API ABSGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 	
 	public:
+	
+	virtual void BeginPlay() override;
+	
 	virtual void OnPostLogin(AController* NewPlayer) override;
+	
+	void PrintChatMessageString(ABSPlayerController* InChattingPlayerController, const FString& InChatMessageString);
+	
+	FString GenerateRandomSecretNumber();
+		
+	FString JudgeResult(const FString& InSecretNumberString, const FString& InGuessNumberString);
+	
+	bool bIsGuessNumberString(const FString& InNumberString);
 };

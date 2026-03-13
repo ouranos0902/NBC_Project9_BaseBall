@@ -8,15 +8,14 @@
 void ABSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	if (!IsLocalController()) return;
 	
 	FInputModeUIOnly InputModeUIOnly;
 	SetInputMode(InputModeUIOnly);
-	
-	if (IsValid(ChatInputClass)==true)
+
+	if (IsValid(ChatInputWidgetClass) == true)
 	{
-		ChatInputWidgetInstance = CreateWidget<UBSChatInput>(this, ChatInputClass);
-		if (IsValid(ChatInputWidgetInstance))
+		ChatInputWidgetInstance = CreateWidget<UBSChatInput>(this, ChatInputWidgetClass);
+		if (IsValid(ChatInputWidgetInstance) == true)
 		{
 			ChatInputWidgetInstance->AddToViewport();
 		}

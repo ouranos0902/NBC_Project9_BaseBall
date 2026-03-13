@@ -24,7 +24,7 @@ public:
 protected:
 	
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UBSChatInput> ChatInputClass;
+	TSubclassOf<UBSChatInput> ChatInputWidgetClass;
 	
 	UPROPERTY()
 	TObjectPtr<UBSChatInput> ChatInputWidgetInstance;

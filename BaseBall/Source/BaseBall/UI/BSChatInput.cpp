@@ -9,23 +9,27 @@
 void UBSChatInput::NativeConstruct()
 {
 	Super::NativeConstruct();
-	if (EditableTextBox_ChatInput->OnTextCommitted.IsAlreadyBound(this, &ThisClass::OnChatInputTextCommited)==false)
+	if (IsValid(EditableTextBox_ChatInput))
 	{
-		EditableTextBox_ChatInput->OnTextCommitted.AddDynamic(this, &ThisClass::OnChatInputTextCommited);
+		if (EditableTextBox_ChatInput->OnTextCommitted.IsAlreadyBound(this, &ThisClass::OnChatInputTextCommitted) == false)
+		{
+			EditableTextBox_ChatInput->OnTextCommitted.AddDynamic(this, &ThisClass::OnChatInputTextCommitted);		
+		}
 	}
-		
 }
 
 void UBSChatInput::NativeDestruct()
 {
 	Super::NativeDestruct();
-	if (EditableTextBox_ChatInput->OnTextCommitted.IsAlreadyBound(this, &ThisClass::OnChatInputTextCommited)==true)
-	{
-		EditableTextBox_ChatInput->OnTextCommitted.RemoveDynamic(this, &ThisClass::OnChatInputTextCommited);
-	}
+	
+		if (EditableTextBox_ChatInput->OnTextCommitted.IsAlreadyBound(this, &ThisClass::OnChatInputTextCommitted) == true)
+		{
+			EditableTextBox_ChatInput->OnTextCommitted.RemoveDynamic(this, &ThisClass::OnChatInputTextCommitted);
+		}
+	
 }
 
-void UBSChatInput::OnChatInputTextCommited(const FText& InText, ETextCommit::Type CommitMethod)
+void UBSChatInput::OnChatInputTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
 {
 	if (CommitMethod==ETextCommit::OnEnter)
 	{
@@ -36,7 +40,7 @@ void UBSChatInput::OnChatInputTextCommited(const FText& InText, ETextCommit::Typ
 			ABSPlayerController* OwningBSPlayerController = Cast<ABSPlayerController>(OwningPlayerController);
 			if (IsValid(OwningBSPlayerController)==true)
 			{
-				OwningBSPlayerController->SetChatMessageString(InText.ToString());
+				OwningBSPlayerController->SetChatMessageString(Text.ToString());
 				EditableTextBox_ChatInput->SetText(FText());
 			}
 		}

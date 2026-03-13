@@ -23,10 +23,10 @@ public:
 protected:
 	
 	UFUNCTION()
-	void OnChatInputTextCommited(const FText& InText, ETextCommit::Type CommitMethod);
+	void OnChatInputTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
 	
 public:
 	
-	UPROPERTY(meta=(BindWidget))
+	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UEditableTextBox> EditableTextBox_ChatInput;
 };

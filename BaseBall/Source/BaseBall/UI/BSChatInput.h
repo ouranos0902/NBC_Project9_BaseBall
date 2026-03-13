@@ -16,6 +16,17 @@ class BASEBALL_API UBSChatInput : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(meta=(BindWidget))
+	
+	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
+	
+protected:
+	
+	UFUNCTION()
+	void OnChatInputTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
+	
+public:
+	
+	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UEditableTextBox> EditableTextBox_ChatInput;
 };

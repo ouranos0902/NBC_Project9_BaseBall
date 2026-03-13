@@ -17,10 +17,17 @@ class BASEBALL_API ABSPlayerController : public APlayerController
 public:
 	virtual void BeginPlay() override;
 	
-	protected:
+	void SetChatMessageString(const FString &InChatMessageString);
+	
+	void PrintChatMessageString(const FString &InChatMessageString);
+	
+protected:
+	
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UBSChatInput> ChatInputClass;
+	TSubclassOf<UBSChatInput> ChatInputWidgetClass;
 	
 	UPROPERTY()
 	TObjectPtr<UBSChatInput> ChatInputWidgetInstance;
+	
+	FString ChatMessageString;
 };

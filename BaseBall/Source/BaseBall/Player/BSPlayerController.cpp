@@ -3,19 +3,37 @@
 
 #include "BSPlayerController.h"
 
+#include "Kismet/KismetSystemLibrary.h"
+
 void ABSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	
 	FInputModeUIOnly InputModeUIOnly;
 	SetInputMode(InputModeUIOnly);
-	
-	if (IsValid(ChatInputClass)==true)
+
+	if (IsValid(ChatInputWidgetClass) == true)
 	{
-		ChatInputWidgetInstance = CreateWidget<UBSChatInput>(this, ChatInputClass);
-		if (IsValid(ChatInputWidgetInstance))
+		ChatInputWidgetInstance = CreateWidget<UBSChatInput>(this, ChatInputWidgetClass);
+		if (IsValid(ChatInputWidgetInstance) == true)
 		{
 			ChatInputWidgetInstance->AddToViewport();
 		}
 	}
+}
+
+void ABSPlayerController::SetChatMessageString(const FString& InChatMessageString)
+{
+	ChatMessageString = InChatMessageString;
+}
+
+void ABSPlayerController::PrintChatMessageString(const FString& InChatMessageString)
+{
+	UKismetSystemLibrary::PrintString(
+		this,
+		InChatMessageString,
+		true,
+		true,
+		FLinearColor::White,
+		5.0f);
 }

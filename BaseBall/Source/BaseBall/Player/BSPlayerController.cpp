@@ -8,6 +8,13 @@
 #include "Kismet/GameplayStatics.h"
 #include "Game/BSGameModeBase.h"
 #include "EngineUtils.h"
+#include "Net/UnrealNetwork.h"
+#include "Blueprint/UserWidget.h"
+
+ABSPlayerController::ABSPlayerController()
+{
+	bReplicates = true;
+}
 
 void ABSPlayerController::BeginPlay()
 {
@@ -24,6 +31,20 @@ void ABSPlayerController::BeginPlay()
 			ChatInputWidgetInstance->AddToViewport();
 		}
 	}
+	if (IsValid(NotificationTextWidgetClass) == true)
+	{
+		NotificationTextWidgetInstance = CreateWidget(this, NotificationTextWidgetClass);
+		if (IsValid(NotificationTextWidgetInstance) == true)
+		{
+			NotificationTextWidgetInstance->AddToViewport();
+		}
+	}
+}
+
+void ABSPlayerController::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ThisClass, NotificationText);
 }
 
 void ABSPlayerController::SetChatMessageString(const FString& InChatMessageString)

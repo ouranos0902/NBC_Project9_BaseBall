@@ -7,6 +7,7 @@
 #include "UI/BSChatInput.h"
 #include "BSPlayerController.generated.h"
 
+class UUserWidget;
 /**
  * 
  */
@@ -15,7 +16,13 @@ class BASEBALL_API ABSPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 public:
+	ABSPlayerController();
+	
 	virtual void BeginPlay() override;
+	
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+public:
+	
 	
 	void SetChatMessageString(const FString &InChatMessageString);
 	
@@ -35,5 +42,15 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UBSChatInput> ChatInputWidgetInstance;
 	
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> NotificationTextWidgetClass;
+	
+	UPROPERTY()
+	TObjectPtr<UUserWidget> NotificationTextWidgetInstance;
+	
 	FString ChatMessageString;
+	
+public:
+	UPROPERTY(Replicated, BlueprintReadOnly)
+	FText NotificationText;
 };

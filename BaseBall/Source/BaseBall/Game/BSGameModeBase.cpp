@@ -20,6 +20,7 @@ void ABSGameModeBase::OnPostLogin(AController* NewPlayer)
 	ABSPlayerController* BSPlayerController = Cast<ABSPlayerController>(NewPlayer);
 	if (IsValid(BSPlayerController)==true)
 	{
+		BSPlayerController->NotificationText = FText::FromString(TEXT("Connected to the game server"));
 		AllPlayerControllers.Add(BSPlayerController);
 		
 		ABSPlayerState* BSPS = BSPlayerController->GetPlayerState<ABSPlayerState>();

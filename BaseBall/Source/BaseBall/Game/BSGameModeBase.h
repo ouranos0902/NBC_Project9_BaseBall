@@ -28,4 +28,9 @@ class BASEBALL_API ABSGameModeBase : public AGameModeBase
 	FString JudgeResult(const FString& InSecretNumberString, const FString& InGuessNumberString);
 	
 	bool bIsGuessNumberString(const FString& InNumberString);
+	
+	protected:
+	
+	FString SecretNumberString;
+	TArray<TObjectPtr<ABSPlayerController>> AllPlayerControllers;
 };

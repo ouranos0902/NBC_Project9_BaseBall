@@ -3,6 +3,8 @@
 
 #include "BSPlayerController.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "Game/BSGameModeBase.h"
 #include "EngineUtils.h"
 
 void ABSPlayerController::BeginPlay()
@@ -44,12 +46,13 @@ void ABSPlayerController::PrintChatMessageString(const FString& InChatMessageStr
 
 void ABSPlayerController::ServerRPCPrintChatMessageString_Implementation(const FString& InChatMessageString)
 {
-	for (TActorIterator<ABSPlayerController> It(GetWorld()); It; ++It)
+	AGameModeBase* GM = UGameplayStatics::GetGameMode(this);
+	if (IsValid(GM) == true)
 	{
-		ABSPlayerController* ABSPlayerController = *It;
-		if (IsValid(ABSPlayerController) == true)
+		ABSGameModeBase* BSGM = Cast<ABSGameModeBase>(GM);
+		if (IsValid(BSGM) == true)
 		{
-			ABSPlayerController->ClientRPCPrintChatMessageString(InChatMessageString);
+			BSGM->PrintChatMessageString(this, InChatMessageString);
 		}
 	}
 }

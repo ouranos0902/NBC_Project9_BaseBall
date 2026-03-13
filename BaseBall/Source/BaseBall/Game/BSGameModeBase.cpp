@@ -3,6 +3,14 @@
 
 #include "BSGameModeBase.h"
 #include "BSGameStateBase.h"
+#include "Player/BSPlayerController.h"
+#include "EngineUtils.h"
+
+void ABSGameModeBase::BeginPlay()
+{
+	Super::BeginPlay();
+	SecretNumberString = GenerateRandomSecretNumber();
+}
 
 void ABSGameModeBase::OnPostLogin(AController* NewPlayer)
 {
@@ -12,6 +20,43 @@ void ABSGameModeBase::OnPostLogin(AController* NewPlayer)
 	if (IsValid(BSGameStateBase) == true)
 	{
 		BSGameStateBase->MulticastRPCBroadcastLoginMessage(TEXT("XXXXXX"));
+	}
+	
+	ABSPlayerController* BSPlayerController = Cast<ABSPlayerController>(NewPlayer);
+	if (IsValid(BSPlayerController) == true)
+	{
+		AllPlayerControllers.Add(BSPlayerController);
+	}
+}
+
+void ABSGameModeBase::PrintChatMessageString(ABSPlayerController* InChattingPlayerController,
+	const FString& InChatMessageString)
+{
+	int Index = InChatMessageString.Len() -3;
+	FString GuessNumberString = InChatMessageString.RightChop(Index);
+	if (bIsGuessNumberString(GuessNumberString) == true)
+	{
+		FString JudgeResultString = JudgeResult(SecretNumberString, GuessNumberString);
+		for (TActorIterator<ABSPlayerController> It(GetWorld()); It; ++It)
+		{
+			ABSPlayerController* BSPlayerController = *It;
+			if (IsValid(BSPlayerController)==true)
+			{
+				FString CombinedMessageString = InChatMessageString + TEXT("->") + JudgeResultString + TEXT("\n");
+				BSPlayerController->ClientRPCPrintChatMessageString(CombinedMessageString);
+			}
+		}
+	}
+	else
+	{
+		for (TActorIterator<ABSPlayerController> It(GetWorld()); It; ++It)
+		{
+			ABSPlayerController* BSPlayerController = *It;
+			if (IsValid(BSPlayerController)==true)
+			{
+				BSPlayerController->ClientRPCPrintChatMessageString(InChatMessageString);
+			}
+		}
 	}
 }
 

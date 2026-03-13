@@ -23,6 +23,8 @@ class BASEBALL_API ABSGameModeBase : public AGameModeBase
 	
 	void PrintChatMessageString(ABSPlayerController* InChattingPlayerController, const FString& InChatMessageString);
 	
+	void IncreaseGuessCount(ABSPlayerController* InChattingPlayerController);
+	
 	FString GenerateRandomSecretNumber();
 		
 	FString JudgeResult(const FString& InSecretNumberString, const FString& InGuessNumberString);

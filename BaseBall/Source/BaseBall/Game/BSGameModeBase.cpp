@@ -43,6 +43,7 @@ void ABSGameModeBase::PrintChatMessageString(ABSPlayerController* InChattingPlay
 	if (bIsGuessNumberString(GuessNumberString) == true)
 	{
 		FString JudgeResultString = JudgeResult(SecretNumberString, GuessNumberString);
+		IncreaseGuessCount(InChattingPlayerController);
 		for (TActorIterator<ABSPlayerController> It(GetWorld()); It; ++It)
 		{
 			ABSPlayerController* BSPlayerController = *It;
@@ -142,4 +143,13 @@ bool ABSGameModeBase::bIsGuessNumberString(const FString& InNumberString)
 	}while (false);
 	
     return bCanPlay;
+}
+
+void ABSGameModeBase::IncreaseGuessCount(ABSPlayerController* InChattingPlayerController)
+{
+	ABSPlayerState* BSPS = InChattingPlayerController->GetPlayerState<ABSPlayerState>();
+	if (IsValid(BSPS)==true)
+	{
+		BSPS->CurrentGuessCount++;
+	}
 }

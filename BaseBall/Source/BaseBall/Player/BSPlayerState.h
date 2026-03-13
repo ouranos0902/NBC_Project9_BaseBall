@@ -19,4 +19,12 @@ public:
 public:
 	UPROPERTY(Replicated)
 	FString PlayerNameString;
+	
+	UPROPERTY(Replicated)
+	int32 CurrentGuessCount;
+	
+	UPROPERTY(Replicated)
+	int32 MaxGuessCount;
+	
+	FString GetPlayerInfoString();
 };

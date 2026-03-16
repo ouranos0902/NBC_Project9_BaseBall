@@ -6,6 +6,7 @@
 #include "Player/BSPlayerController.h"
 #include "EngineUtils.h"
 #include "Player/BSPlayerState.h"
+#include "Runtime/VerseCompiler/Public/uLang/Parser/VerseGrammar.h"
 
 void ABSGameModeBase::BeginPlay()
 {
@@ -40,7 +41,22 @@ void ABSGameModeBase::OnPostLogin(AController* NewPlayer)
 void ABSGameModeBase::PrintChatMessageString(ABSPlayerController* InChattingPlayerController,
 	const FString& InChatMessageString)
 {
-	int Index = InChatMessageString.Len() -3;
+	bool bIsAllDigit = true;
+	for (TCHAR C : InChatMessageString)
+	{
+		if (!FChar::IsDigit(C))
+		{
+			bIsAllDigit = false;
+			break;
+		}
+	}
+	if (bIsAllDigit && InChatMessageString.Len() != 3)
+	{
+		InChattingPlayerController->ClientRPCPrintChatMessageString(TEXT("다시 입력하세요"));
+		return;
+	}
+	
+	int Index = FMath::Max(0,InChatMessageString.Len() -3);
 	FString GuessNumberString = InChatMessageString.RightChop(Index);
 	if (bIsGuessNumberString(GuessNumberString) == true)
 	{
@@ -60,6 +76,19 @@ void ABSGameModeBase::PrintChatMessageString(ABSPlayerController* InChattingPlay
 	}
 	else
 	{
+		bool bIsNumberAttempt = false;
+		for (TCHAR C : GuessNumberString)
+		{
+			if (C != ' ' && FChar::IsDigit(C) == false)
+			{
+				bIsNumberAttempt = false;
+				break;
+			}
+		}
+		if (bIsNumberAttempt == true)
+		{
+			InChattingPlayerController->ClientRPCPrintChatMessageString(TEXT("다시 입력하세요"));
+		}
 		for (TActorIterator<ABSPlayerController> It(GetWorld()); It; ++It)
 		{
 			ABSPlayerController* BSPlayerController = *It;
@@ -70,6 +99,7 @@ void ABSGameModeBase::PrintChatMessageString(ABSPlayerController* InChattingPlay
 		}
 	}
 }
+
 
 FString ABSGameModeBase::GenerateSecretNumber()
 {
@@ -133,7 +163,7 @@ bool ABSGameModeBase::bIsGuessNumberString(const FString& InNumberString)
 		TSet<TCHAR> UniqueDigits;
 		for (TCHAR C: InNumberString)
 		{
-			if (FChar::IsDigit(C) == false || C == '0')
+			if (FChar::IsDigit(C) == false || C == '0' || UniqueDigits.Contains(C) == true)
 			{
 				bIsUnique = false;
 				break;
@@ -147,7 +177,7 @@ bool ABSGameModeBase::bIsGuessNumberString(const FString& InNumberString)
 		bCanPlay = true;
 	}while (false);
 	
-    return bCanPlay;
+	return bCanPlay;
 }
 
 void ABSGameModeBase::IncreaseGuessCount(ABSPlayerController* InChattingPlayerController)

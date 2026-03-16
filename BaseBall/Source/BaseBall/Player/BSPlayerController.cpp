@@ -59,8 +59,8 @@ void ABSPlayerController::SetChatMessageString(const FString& InChatMessageStrin
 		ABSPlayerState* BSPS = GetPlayerState<ABSPlayerState>();
 		if (IsValid(BSPS) == true)
 		{
-			FString CombinedChatMessageString = BSPS->GetPlayerInfoString() + TEXT(": ") + InChatMessageString;
-			ServerRPCPrintChatMessageString(CombinedChatMessageString);
+			//FString CombinedChatMessageString = BSPS->GetPlayerInfoString() + TEXT(": ") + InChatMessageString;
+			ServerRPCPrintChatMessageString(InChatMessageString);
 		}
 	}
 }
